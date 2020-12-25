@@ -27,7 +27,7 @@ def fofa(driver, page, count):
         pageNum+=1
         #====================================
         if(count!=None):
-            if(num>=page):
+            if(num>=count):
                 exit()
         if(page!=None):
             if(pageNum>=page):
