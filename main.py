@@ -167,29 +167,6 @@ def processSource(source):
     f.close()
     return c
 
-def setOpinions(os, engine, key, save, page, count):
-    driverPath = ""
-    if(os == "windows"):
-        driverPath = "chromedriver.exe"
-    elif(os == "linux"):
-        driverPath = "chromedriverLinux"
-    elif(os == "mac"):
-        driverPath = "chromedriverMac"
-    else:
-        print("Please enter the correct os!")
-        exit()
-    driver = webdriver.Chrome(executable_path=driverPath)
-    if(engine == "google"):
-        google(driver, key, save, engine)
-    elif(engine == "baidu"):
-        baidu(driver, key, save, engine)
-    elif(engine == "bing"):
-        bing(driver, key, save, engine)
-    elif(engine ==  "fofa"):
-        fofa(driver, page, count)
-    else:
-        print('Please input right engine!')
-
 def saveToFile(urls):
     f = open('result.txt', 'a+', encoding='utf-8')
     for url in urls:
@@ -203,8 +180,8 @@ if __name__ == '__main__':
     parser.add_argument('-e', help="Choose the search engine you want to use.[baidu/google/bingCN(国内版)/bingEN(国际版)/fofa(需自行登录和搜索)]", type=str, dest='engine', default="baidu")
     parser.add_argument('-key', help="input the key to search for", type=str, dest='key')
     parser.add_argument('-save', help="What type do you want to save.\ndoamin[www.baidu.com]\nsite[https://www.baidu.com/]\nurl[https://www.aidu.com/news.php?id=xxx]", type=str, dest='save', default="site")
-    parser.add_argument('-page', help='setting max number pages.', type=int, dest='page', default=10)
-    parser.add_argument('-count', help='Set the count of results', type=int, dest='count', default=100)
+    parser.add_argument('-page', help='setting max number pages.', type=int, dest='page')
+    parser.add_argument('-count', help='Set the count of results', type=int, dest='count')
     args = parser.parse_args()
     print("-" * 80)
     print("\t多搜索引擎Url半自动化采集器")
@@ -213,8 +190,27 @@ if __name__ == '__main__':
     print('\n新增：\t新增fofa抓取，需等待浏览器打开之后进行常规的登录搜索操作')
     print('\t搜索结果出来之后，等待页面加载完毕在命令行输入任意键继续...\n')
     print("-" * 80)
-
     if args.key==None and args.engine!='fofa':
         print('useage : python ' +str(sys.argv[0]) + ' -h')
     else:
-        setOpinions(args.os, args.engine, args.key, args.save, args.page, args.count)
+        driverPath = ""
+        if (args.os == "windows"):
+            driverPath = "chromedriver.exe"
+        elif (args.os == "linux"):
+            driverPath = "chromedriverLinux"
+        elif (args.os == "mac"):
+            driverPath = "chromedriverMac"
+        else:
+            print("Please enter the correct os!")
+            exit()
+        driver = webdriver.Chrome(executable_path=driverPath)
+        if (args.engine == "google"):
+            google(driver, args.key, args.save, args.engine)
+        elif (args.engine == "baidu"):
+            baidu(driver, args.key, args.save, args.engine)
+        elif (args.engine == "bing"):
+            bing(driver, args.key, args.save, args.engine)
+        elif (args.engine == "fofa"):
+            fofa(driver, args.page, args.count)
+        else:
+            print('Please input right engine!')
